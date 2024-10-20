@@ -27,10 +27,10 @@ class OnboarrdigScreen extends StatelessWidget {
             return Column(
               children: [
                 Expanded(
-                  child: PageView( 
+                  child: PageView(
                     onPageChanged: (value) {
                       onBoardNotifier.updateState();
-                    },               
+                    },
                     controller: onBoardNotifier.pageController,
                     physics: onBoardNotifier.isLastPage
                         ? const NeverScrollableScrollPhysics()
@@ -45,15 +45,18 @@ class OnboarrdigScreen extends StatelessWidget {
                 SmoothPageIndicator(
                   controller: onBoardNotifier.pageController,
                   count: 2,
-                  effect: const WormEffect(
-                   activeDotColor: AppColors.primary
-                  ),
+                  effect: const WormEffect(activeDotColor: AppColors.primary),
                   axisDirection: Axis.horizontal,
                 ),
                 const HieghtSpacer(size: 59),
                 Buttons(
-                    label: onBoardNotifier.isLastPage ? "Get Started" : "Continue",
-                    ontap: onBoardNotifier.isLastPage ? (){Navigator.pushNamed(context,'/register');} : onBoardNotifier.goForward)
+                    label:
+                        onBoardNotifier.isLastPage ? "Get Started" : "Continue",
+                    ontap: onBoardNotifier.isLastPage
+                        ? () {
+                            Navigator.pushNamed(context, '/register');
+                          }
+                        : onBoardNotifier.goForward)
               ],
             );
           },

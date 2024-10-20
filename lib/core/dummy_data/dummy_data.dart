@@ -6,7 +6,6 @@ class DummyData {
       name: "Chicken Teryaki Bowl",
       price: 14.99,
       ratersNumber: 121,
-      quantity: 1,
       rating: 4.9,
       type: "Japanese Beef",
       image: AppImages.firstMenu);
@@ -14,7 +13,6 @@ class DummyData {
       name: "Chicken Teryaki Bowl",
       price: 14.99,
       ratersNumber: 121,
-      quantity: 1,
       rating: 4.9,
       type: "Japanese Beef",
       image: AppImages.secondMenu);
@@ -22,7 +20,6 @@ class DummyData {
       name: "Ramen Phapsody ",
       price: 10.99,
       ratersNumber: 121,
-      quantity: 1,
       rating: 4.9,
       type: "Japanese Beef",
       image: AppImages.ramen);
@@ -30,7 +27,6 @@ class DummyData {
       name: "Sushi Symphony Bowl",
       price: 14.99,
       ratersNumber: 121,
-      quantity: 1,
       rating: 4.9,
       type: "Japanese Beef",
       image: AppImages.sushi);
@@ -38,7 +34,6 @@ class DummyData {
       name: "Umami Utopia Bowl",
       price: 12.99,
       ratersNumber: 121,
-      quantity: 1,
       rating: 4.9,
       type: "Japanese Beef",
       image: AppImages.umami);

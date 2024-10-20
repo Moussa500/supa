@@ -4,6 +4,7 @@ import 'package:supa/config/colors/app_colors.dart';
 import 'package:supa/core/common/widgets/app_style.dart';
 import 'package:supa/core/common/widgets/hieght_spacer.dart';
 import 'package:supa/core/dummy_data/dummy_data.dart';
+import 'package:supa/features/menu/domain/entities/menu_entity.dart';
 import 'package:supa/features/menu/presentation/pages/detail.dart';
 
 class FeaturedMenu extends StatefulWidget {
@@ -33,7 +34,9 @@ class _FeaturedMenuState extends State<FeaturedMenu> {
           itemCount: 4,
           itemBuilder: (context, index) {
             return GestureDetector(
-              onTap: ()=>Navigator.pushNamed(context,'/details'),
+              onTap: () => Navigator.pushNamed(context, '/details',
+                  arguments: CardItem(
+                      product: DummyData.featuredmenuList[index], quantity: 1)),
               child: SizedBox(
                 height: 280,
                 child: Column(
@@ -41,7 +44,8 @@ class _FeaturedMenuState extends State<FeaturedMenu> {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(16.r))),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(16.r))),
                       width: 220.w,
                       height: 155.h,
                       child: Image.asset(

@@ -1,30 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:supa/config/assets/app_vectors.dart';
 import 'package:supa/config/colors/app_colors.dart';
 import 'package:supa/core/common/widgets/app_style.dart';
 import 'package:supa/core/common/widgets/custom_app_bar.dart';
 import 'package:supa/core/common/widgets/hieght_spacer.dart';
 import 'package:supa/core/common/widgets/width_spacer.dart';
 import 'package:supa/core/dummy_data/dummy_data.dart';
-import 'package:supa/core/enums/menu_enums.dart';
 import 'package:supa/features/menu/domain/entities/menu_entity.dart';
-import 'package:supa/features/menu/presentation/bloc/order_bloc.dart';
+import 'package:supa/features/menu/presentation/bloc/order/cart_cubit.dart';
+import 'package:supa/features/menu/presentation/bloc/order/cart_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:supa/features/menu/presentation/widgets/shared_methods.dart';
 
 class Detail extends StatefulWidget {
-  const Detail({super.key});
+  const Detail({
+    super.key,
+  });
   @override
   State<Detail> createState() => _DetailState();
 }
 
 bool teryaki = false;
-int quantity = 1;
-double price = 16.99;
 
 class _DetailState extends State<Detail> {
   @override
   Widget build(BuildContext context) {
+    CardItem product = ModalRoute.of(context)!.settings.arguments as CardItem;
     return Scaffold(
         appBar: CustomAppbar(
           leadingAction: () => Navigator.pushNamed(
@@ -38,10 +40,8 @@ class _DetailState extends State<Detail> {
           child: Stack(
             children: [
               ListView(children: [
-                BlocBuilder<OrderBloc, OrderState>(
+                BlocBuilder<CartBloc, CartState>(
                   builder: (context, state) {
-                      quantity = state.quantity ?? 1;
-                      price = state.price ?? 16.99;
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -63,8 +63,49 @@ class _DetailState extends State<Detail> {
                               fontColor: AppColors.drakGrey),
                         ),
                         const HieghtSpacer(size: 18),
-                        SharedMethods.quantityOfOrders(
-                            quantity,price, context),
+                        SizedBox(
+                          width: 200.w,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      if (product.quantity > 1) {
+                                        product.quantity--;
+                                      }
+                                    });
+                                  },
+                                  child: SvgPicture.asset(
+                                      AppVectors.decreaseButton)),
+                              WidthSpacer(size: 8.w),
+                              Text(
+                                "${product.quantity}",
+                                style: AppStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    fontColor: Colors.black),
+                              ),
+                              WidthSpacer(size: 8.w),
+                              GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      product.quantity++;
+                                    });
+                                  },
+                                  child: SvgPicture.asset(
+                                      AppVectors.increaseButton)),
+                              WidthSpacer(size: 8.w),
+                              Text(
+                                "\$${product.totalPrice.toStringAsFixed(2)}",
+                                style: AppStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    fontColor: AppColors.primary),
+                              ),
+                            ],
+                          ),
+                        ),
                         const HieghtSpacer(size: 53),
                         header("Sauce"),
                         const HieghtSpacer(size: 8),
@@ -97,21 +138,15 @@ class _DetailState extends State<Detail> {
                         Center(
                           child: ElevatedButton(
                               onPressed: () {
-                                context
-                                    .read<OrderBloc>()
-                                    .add(AddToCartButtonPressed(
-                                        item: MenuEntity(
-                                      name: DummyData.firstMenu.name,
-                                      price: price,
-                                      image: DummyData.firstMenu.image,
-                                      sauce: const <Sauce>[],
-                                      quantity: quantity,
-                                      ratersNumber: 0,
-                                      rating: 0,
-                                      toppings: <Toppings>[],
-                                      type: DummyData.firstMenu.type,
-                                    )));
-                                print(state.items);
+                                BlocProvider.of<CartBloc>(context)
+                                    .addToCart(product);
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  backgroundColor: AppColors.primary,
+                                  content: Text(" added successfully"),
+                                ));
+                                Navigator.pushNamed(context, '/navigator',
+                                    arguments: 2);
                               },
                               child: Text(
                                 "Add to card",
